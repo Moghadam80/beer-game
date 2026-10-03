@@ -65,6 +65,25 @@ export class GamesService {
       costs: Object.fromEntries(ROLES.map((role) => [role, room.state.roles[role].totalCost])),
       total: ROLES.reduce((total, role) => total + room.state.roles[role].totalCost, 0),
     } : null;
+    const analytics =
+  room.state.status === 'finished'
+    ? Object.fromEntries(
+        ROLES.map((role) => [
+          role,
+          {
+            role,
+            history: room.state.roles[role].history.map(
+              (item, index) => ({
+                round: index + 1,
+                inventory: item.inventory,
+                backlog: item.backlog,
+                order: item.orderPlaced,
+              }),
+            ),
+          },
+        ]),
+      )
+    : null;
     return {
       type: 'state' as const, code: room.code, status: room.state.status,
       round: room.state.round, totalRounds: TOTAL_ROUNDS, role: member?.role ?? null, own, results,
@@ -76,6 +95,7 @@ export class GamesService {
           submitted: Object.hasOwn(room.state.orders, role),
         };
       }),
+      analytics
     };
   }
 }

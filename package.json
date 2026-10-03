@@ -2,8 +2,13 @@
   "name": "beer-distribution-game",
   "version": "1.0.0",
   "private": true,
-  "engines": { "node": ">=24" },
-  "workspaces": ["backend", "frontend"],
+  "engines": {
+    "node": ">=24"
+  },
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
     "dev": "concurrently --kill-others --names backend,frontend \"npm run start:dev --workspace backend\" \"npm run dev --workspace frontend\"",
     "test": "npm test --workspace backend && npm run test:e2e --workspace backend",
@@ -11,5 +16,10 @@
     "start": "npm run start:prod --workspace backend",
     "lint": "npm run lint --workspace frontend && npm run lint --workspace backend"
   },
-  "devDependencies": { "concurrently": "^9.2.1" }
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "recharts": "^3.10.1"
+  }
 }

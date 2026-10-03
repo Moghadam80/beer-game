@@ -2,7 +2,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { formatNumber } from '@/lib/format';
 import { ROLE_LABELS, ROLES, type GameResults, type GameView } from '@/game/protocol';
+import { lazy, Suspense } from 'react';
 
+const GameAnalytics = lazy(
+  () =>
+    import('../game/GameAnalytics').then((module) => ({
+      default: module.GameAnalytics,
+    })),
+);
 interface ResultsScreenProps {
   view: GameView;
   results: GameResults;
@@ -46,6 +53,20 @@ export function ResultsScreen({ view, results }: ResultsScreenProps) {
             </TableRow>
           </TableFooter>
         </Table>
+      {view.analytics && view.own && view.role && (
+  <Suspense
+    fallback={
+      <div className="text-sm text-muted-foreground">
+        Loading analytics...
+      </div>
+    }
+  >
+    <GameAnalytics
+      role={view.role}
+      history={view.analytics[view.role].history}
+    />
+  </Suspense>
+)}
       </CardContent>
     </Card>
   );

@@ -45,6 +45,7 @@ export interface GameView {
   players: PlayerSummary[];
   own: OwnState | null;
   results: GameResults | null;
+  analytics: GameAnalytics | null;
 }
 
 /** A view that belongs to a seated player, so role and own numbers exist. */
@@ -71,3 +72,17 @@ export type ClientMessage =
   | { action: 'join'; code: string; role: Role; name: string }
   | { action: 'resume'; code: string; token: string }
   | { action: 'order'; round: number; order: number };
+
+  export type AnalyticsRound = {
+  round: number;
+  inventory: number;
+  backlog: number;
+  order: number;
+};
+
+export type RoleAnalytics = {
+  role: Role;
+  history: AnalyticsRound[];
+};
+
+export type GameAnalytics = Record<Role, RoleAnalytics>;
